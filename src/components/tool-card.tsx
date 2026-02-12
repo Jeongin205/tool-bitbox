@@ -7,10 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { NavItem } from "@/config/nav"; // Assuming NavItem is defined in nav.ts
+import { SiteConfig } from "@/config/nav";
 
 interface ToolCardProps {
-  tool: NavItem;
+  tool: SiteConfig;
 }
 
 export function ToolCard({ tool }: ToolCardProps) {
