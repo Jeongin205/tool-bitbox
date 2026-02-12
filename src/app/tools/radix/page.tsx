@@ -2,8 +2,8 @@ import { RadixConverter } from "@/components/tools/radix-converter";
 import { ToolPage } from "@/components/tools/tool-page-layout";
 
 export const metadata = {
-  title: "진법 변환기 - ToolBitBox",
-  description: "2진수, 8진수, 10진수, 16진수를 실시간으로 상호 변환합니다.",
+  title: "컴퓨터 공학 1학년 진법 변환기 - ToolBitBox (2, 8, 10, 16진수 계산)",
+  description: "컴퓨터 공학 1학년 학생을 위한 필수 진법 변환기. 2진수, 8진수, 10진수, 16진수를 실시간으로 상호 변환하고 학습하세요.",
 };
 
 export default function RadixPage() {

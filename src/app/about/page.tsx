@@ -12,9 +12,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
-  title: "소개 (About)",
+  title: "소개 (About) - 컴퓨터 공학/소프트웨어학과 1학년 학습 도구 ToolBitBox",
   description:
-    "ToolBitBox 프로젝트 개발 스토리와 사용된 기술 스택을 소개합니다.",
+    "컴퓨터 공학/소프트웨어학과 1학년 학습을 돕는 ToolBitBox 프로젝트의 개발 스토리와 활용된 최신 웹 기술 스택을 소개합니다.",
 };
 
 export default function AboutPage() {

@@ -18,19 +18,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://bit-box.vercel.app'),
   title: {
     template: "%s | ToolBitBox", // 페이지별 타이틀 뒤에 자동으로 붙음 (예: 진법 변환기 | BitBox)
-    default: "ToolBitBox - 개발자를 위한 스마트 도구 상자", // 기본 타이틀
+    default: "ToolBitBox - 컴퓨터 공학/소프트웨어학과 1학년 진법 학습 및 시험 대비 도구", // 기본 타이틀
   },
   description:
-    "2진수, 8진수, 16진수 변환부터 2의 보수 계산까지. 컴퓨터 공학 전공자와 개발자를 위한 필수 웹 유틸리티 모음입니다.",
+    "2진수, 8진수, 16진수 변환부터 2의 보수 계산까지. 컴퓨터 공학/소프트웨어학과 1학년 학생들이 진법 변환, 2의 보수 등 개념을 학습하고 시험을 대비하는 데 최적화된 웹 유틸리티입니다.",
   keywords: [
+    "컴퓨터 공학 1학년 진법 변환",
+    "소프트웨어학과 2진수",
+    "N진법 계산기 시험 대비",
+    "2의 보수 개념 학습",
+    "진법 퀴즈 대학생",
+    "컴퓨터 구조 진법",
+    "시스템 프로그래밍 진법",
+    "ToolBitBox",
     "진법 변환기",
     "2진수 변환",
     "16진수 계산",
     "2의 보수",
-    "개발자 도구",
-    "ToolBitBox",
+    "정보처리기사 진법 변환",
   ],
   authors: [{ name: "ToolBitBox Team" }],
   creator: "ToolBitBox Team",
@@ -64,7 +72,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

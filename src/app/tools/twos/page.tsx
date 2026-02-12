@@ -3,9 +3,9 @@ import { TwosCalculator } from "@/components/tools/twos-calculator";
 import { ToolPage } from "@/components/tools/tool-page-layout";
 
 export const metadata: Metadata = {
-  title: "2의 보수 계산기",
+  title: "컴퓨터 공학 1학년 2의 보수 계산기 - 시험 대비 (4/8/16/32비트)",
   description:
-    "음수 표현을 위한 2의 보수(Two's Complement) 변환기. 4/8/16/32비트 모드를 지원합니다.",
+    "컴퓨터 공학 1학년 학생을 위한 2의 보수(Two's Complement) 학습 및 시험 대비 계산기. 음수 표현 원리를 이해하고 4/8/16/32비트 모드로 변환 연습을 하세요.",
 };
 
 export default function TwosPage() {
