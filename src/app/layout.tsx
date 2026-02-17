@@ -81,6 +81,17 @@ export default function RootLayout({
         <Footer />
         <Toaster position="top-center" richColors />
         <Analytics />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "ToolBitBox",
+              url: "https://tool-bitbox.vercel.app",
+            }),
+          }}
+        />
       </body>
     </html>
   );
