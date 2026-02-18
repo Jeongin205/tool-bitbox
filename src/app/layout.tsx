@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://bit-box.vercel.app'),
+  metadataBase: new URL('https://tool-bitbox.vercel.app'),
   title: {
     template: "%s | ToolBitBox", // 페이지별 타이틀 뒤에 자동으로 붙음 (예: 진법 변환기 | BitBox)
     default: "ToolBitBox - 컴퓨터 공학/소프트웨어학과 1학년 진법 학습 및 시험 대비 도구", // 기본 타이틀
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     title: "ToolBitBox - 개발자를 위한 스마트 도구 상자",
     description:
       "복잡한 계산은 ToolBitBox에 맡기세요. 빠르고 정확한 개발자용 도구 모음.",
-    url: "https://bit-box.vercel.app",
+    url: "https://tool-bitbox.vercel.app",
     siteName: "ToolBitBox",
     images: [
       {
