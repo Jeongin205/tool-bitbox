@@ -152,7 +152,7 @@ export function HexColorConverter() {
         {/* [LEFT COLUMN] */}
         <div className="lg:col-span-5 space-y-6">
           <Card className="border-slate-200 shadow-sm relative overflow-hidden">
-            <CardHeader className="pb-4 border-b bg-slate-50/50">
+            <CardHeader className="pb-4 border-b">
               <div className="flex items-center gap-2">
                 <Pipette size={18} className="text-slate-500" />
                 <CardTitle className="text-lg">Color Picker</CardTitle>
@@ -233,7 +233,7 @@ export function HexColorConverter() {
         {/* [RIGHT COLUMN] */}
         <div className="lg:col-span-7 space-y-6 font-mono">
           <Card className="border-slate-200 shadow-sm transition-all">
-            <CardHeader className="pb-4 border-b bg-slate-50/50">
+            <CardHeader className="pb-4 border-b ">
               <CardTitle className="text-lg">Color Values</CardTitle>
               {/* [수정 포인트] CardDescription을 에러 메시지 영역으로 활용 */}
               <div className="h-5 flex items-center">
@@ -374,7 +374,7 @@ export function HexColorConverter() {
 
           {/* 접근성 검사 카드 */}
           <Card className="border-slate-200 shadow-sm overflow-hidden">
-            <CardHeader className="pb-3 border-b bg-slate-50/50 flex flex-row items-center justify-between">
+            <CardHeader className="pb-3 border-b flex flex-row items-center justify-between">
               <div className="space-y-1">
                 <CardTitle className="text-lg">Contrast Ratio</CardTitle>
                 <CardDescription className="font-sans">
