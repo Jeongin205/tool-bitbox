@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 
 interface CopyInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value: string;
-  onValueChange: (value: string) => void;
+  onValueChange?: (value: string) => void; // 선택적으로 변경
   copyLabel?: string;
-  iconClassName?: string; // 🎨 새로 추가: 아이콘/버튼 스타일 커스텀
+  iconClassName?: string;
 }
 
 export function CopyInput({
@@ -19,7 +19,7 @@ export function CopyInput({
   onValueChange,
   copyLabel = "값",
   className,
-  iconClassName, // 받아오기
+  iconClassName,
   type = "text",
   ...props
 }: CopyInputProps) {
@@ -34,7 +34,8 @@ export function CopyInput({
       <Input
         type={type}
         value={value}
-        onChange={(e) => onValueChange(e.target.value)}
+        onChange={onValueChange ? (e) => onValueChange(e.target.value) : undefined}
+        readOnly={!onValueChange || props.readOnly} // onValueChange가 없으면 readOnly
         className={cn(
           "h-14 pr-12 text-lg font-mono focus-visible:ring-2 focus-visible:ring-blue-600 transition-all",
           "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
