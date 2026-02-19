@@ -164,7 +164,11 @@ export function HexColorConverter() {
 
             <CardContent className="p-6 space-y-6">
               <div className="custom-color-picker-wrapper">
-                <HexColorPicker color={color} onChange={handleColorChange} />
+                <HexColorPicker
+                  color={color}
+                  onChange={handleColorChange}
+                  style={{ width: "100%" }}
+                />
                 <div className="flex items-center gap-2 mt-4 p-1 pl-3 border rounded-md bg-slate-50 focus-within:ring-2 ring-slate-950 ring-offset-2 transition-all">
                   <span className="text-slate-400 font-mono select-none">
                     #
