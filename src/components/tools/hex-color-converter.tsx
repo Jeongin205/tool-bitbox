@@ -395,7 +395,7 @@ export function HexColorConverter() {
               </Badge>
             </CardHeader>
 
-            <CardContent className="pt-0 px-0 font-sans">
+            <CardContent className="pt-0 font-sans">
               <div className="divide-y">
                 <AccessibilityRow
                   label="AA Large Text"
@@ -438,7 +438,7 @@ function AccessibilityRow({
   return (
     <div
       className={cn(
-        "flex items-center justify-between p-4 transition-colors",
+        "flex items-center justify-between py-4 transition-colors",
         passed
           ? "bg-white hover:bg-green-50/30"
           : "bg-red-50/30 hover:bg-red-50/50",
