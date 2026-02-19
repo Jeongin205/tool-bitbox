@@ -118,15 +118,6 @@ export function HexColorConverter() {
     return getContrastRatio(color, targetTextColor);
   }, [color, textColor]);
 
-  // 에러 상태일 때 Input에 적용할 클래스
-  const getInputClass = (val: number) =>
-    cn(
-      "pl-8 transition-all duration-200",
-      error && (val < 0 || val > 255) // 실제로는 onChange에서 막히지만 시각적 피드백을 위해 유지
-        ? "border-red-500 ring-red-500 focus-visible:ring-red-500 bg-red-50 animate-shake"
-        : "bg-slate-50",
-    );
-
   return (
     <>
       {/* Shake 애니메이션 정의 (Tailwind config에 없다면 여기서 style로 주입) */}
@@ -169,7 +160,7 @@ export function HexColorConverter() {
                   onChange={handleColorChange}
                   style={{ width: "100%" }}
                 />
-                <div className="flex items-center gap-2 mt-4 p-1 pl-3 border rounded-md bg-slate-50 focus-within:ring-2 ring-slate-950 ring-offset-2 transition-all">
+                <div className="flex items-center gap-2 mt-4 p-1 pl-3 border rounded-md bg-white hover:border-slate-400 focus-within:ring-2 ring-slate-950 ring-offset-2 transition-all">
                   <span className="text-slate-400 font-mono select-none">
                     #
                   </span>
@@ -262,6 +253,7 @@ export function HexColorConverter() {
                   id="hex-code"
                   value={color.toUpperCase()}
                   onValueChange={handleHexInputChange}
+                  className="bg-white hover:border-slate-400 focus:bg-white transition-all"
                 />
               </div>
 
@@ -281,7 +273,7 @@ export function HexColorConverter() {
                       onChange={(e) => handleRgbChange("r", e.target.value)}
                       // 에러 시 빨간 테두리 + 흔들림 효과
                       className={cn(
-                        "pl-8 bg-slate-50 transition-colors",
+                        "pl-8 bg-white transition-all hover:border-slate-400 focus:bg-white",
                         error &&
                           "border-red-500 focus-visible:ring-red-500 bg-red-50",
                       )}
@@ -314,7 +306,7 @@ export function HexColorConverter() {
                       value={rgb.g}
                       onChange={(e) => handleRgbChange("g", e.target.value)}
                       className={cn(
-                        "pl-8 bg-slate-50 transition-colors",
+                        "pl-8 bg-white transition-all hover:border-slate-400 focus:bg-white",
                         error &&
                           "border-red-500 focus-visible:ring-red-500 bg-red-50",
                       )}
@@ -347,7 +339,7 @@ export function HexColorConverter() {
                       value={rgb.b}
                       onChange={(e) => handleRgbChange("b", e.target.value)}
                       className={cn(
-                        "pl-8 bg-slate-50 transition-colors",
+                        "pl-8 bg-white transition-all hover:border-slate-400 focus:bg-white",
                         error &&
                           "border-red-500 focus-visible:ring-red-500 bg-red-50",
                       )}
