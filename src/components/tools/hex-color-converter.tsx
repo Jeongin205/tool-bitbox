@@ -178,7 +178,7 @@ export function HexColorConverter() {
               <div className="space-y-3">
                 <p className="text-xs text-slate-500 font-medium">Preview</p>
                 <div
-                  className="h-32 w-full rounded-lg border flex flex-col items-center justify-center transition-colors duration-200 relative shadow-sm overflow-hidden"
+                  className="h-44 w-full rounded-lg border flex flex-col items-center justify-center transition-colors duration-200 relative shadow-sm overflow-hidden"
                   style={{ backgroundColor: color }}
                 >
                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none mix-blend-overlay"></div>
