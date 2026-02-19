@@ -67,7 +67,19 @@ export function HexColorConverter() {
       `}</style>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        <div className="lg:col-span-5 space-y-6">
+        {/* [1] Color Values (Mobile: 1st, Desktop: Right Top) */}
+        <div className="order-1 lg:order-2 lg:col-span-7 font-mono">
+          <ColorValuesSection
+            color={color}
+            rgb={rgb}
+            error={error}
+            onHexChange={handleHexInputChange}
+            onRgbChange={handleRgbChange}
+          />
+        </div>
+
+        {/* [2] Color Picker (Mobile: 2nd, Desktop: Left Side) */}
+        <div className="order-2 lg:order-1 lg:col-span-5 lg:row-span-2 space-y-6">
           <ColorPickerSection
             color={color}
             textColor={textColor}
@@ -76,15 +88,8 @@ export function HexColorConverter() {
           />
         </div>
 
-        <div className="lg:col-span-7 space-y-6 font-mono">
-          <ColorValuesSection
-            color={color}
-            rgb={rgb}
-            error={error}
-            onHexChange={handleHexInputChange}
-            onRgbChange={handleRgbChange}
-          />
-
+        {/* [3] Contrast Ratio (Mobile: 3rd, Desktop: Right Bottom) */}
+        <div className="order-3 lg:order-3 lg:col-span-7">
           <ContrastRatioSection contrastRatio={contrastRatio} />
         </div>
       </div>
