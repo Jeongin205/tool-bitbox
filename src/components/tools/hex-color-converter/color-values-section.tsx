@@ -54,7 +54,10 @@ export function ColorValuesSection({
             id="hex-code"
             value={color.toUpperCase()}
             onValueChange={onHexChange}
-            className="bg-white hover:border-slate-400 focus:bg-white transition-all"
+            className={cn(
+              "bg-white hover:border-slate-400 focus:bg-white transition-all",
+              error && "border-red-500 focus-visible:ring-red-500 bg-red-50"
+            )}
           />
         </div>
 

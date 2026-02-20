@@ -23,11 +23,23 @@ export function HexColorConverter() {
   }, []);
 
   const handleHexInputChange = useCallback((value: string) => {
-    if (value.startsWith("#")) {
-      setColor(value);
-    } else {
-      setColor(`#${value}`);
+    const hex = value.startsWith("#") ? value : `#${value}`;
+
+    // HEX Code validation (Length and valid hex characters)
+    if (hex.length > 7) {
+      setError("HEX 코드는 최대 6자리입니다.");
+      setTimeout(() => setError(null), 2000);
+      return;
     }
+
+    const hexPattern = /^#([A-Fa-f0-9]*)$/;
+    if (!hexPattern.test(hex)) {
+      setError("HEX 코드는 0-9, A-F 사이의 문자여야 합니다.");
+      setTimeout(() => setError(null), 2000);
+      return;
+    }
+
+    setColor(hex);
     setError(null);
   }, []);
 
