@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://bit-box.vercel.app"; // URL이 바뀌면 여기만 고치면 됨
+  const baseUrl = "https://tool-bitbox.vercel.app"; // URL이 바뀌면 여기만 고치면 됨
 
   return [
     // 1. 메인 페이지
