@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useCallback } from "react";
+import React, { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ToolHeader } from "@/components/tools/tool-header";
 import { cn } from "@/lib/utils";
 import {
   Play,
@@ -17,6 +18,8 @@ import {
   MoveRight,
   MoveLeft,
   AlertCircle,
+  Binary,
+  Copy,
 } from "lucide-react";
 
 type BitMode = 4 | 8 | 16;
@@ -31,6 +34,28 @@ export function BitwiseSimulator() {
   // 시뮬레이션 상태
   const [currentStep, setCurrentStep] = useState<number>(-1);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
+  const [isManualMode, setIsManualMode] = useState(false);
+
+  const isShift = operator === "<<" || operator === ">>";
+
+  // 입력값에 따른 비트 모드 자동 조절
+  useEffect(() => {
+    if (isManualMode) return; // 수동 모드(탭 클릭 이후)라면 절대 개입하지 않음
+
+    const vA = Math.abs(parseInt(numA) || 0);
+    const vB = operator === "~" || isShift ? 0 : Math.abs(parseInt(numB) || 0);
+    const maxV = Math.max(vA, vB);
+
+    let nextMode: BitMode = 4;
+    if (maxV > 255) nextMode = 16;
+    else if (maxV > 15) nextMode = 8;
+
+    if (nextMode !== bitMode) {
+      setBitMode(nextMode);
+      setCurrentStep(-1);
+      setIsAutoPlaying(false);
+    }
+  }, [numA, numB, operator, isShift, bitMode, isManualMode]);
 
   const mask = useMemo(() => (1 << bitMode) - 1, [bitMode]);
   const maxVal = useMemo(() => Math.pow(2, bitMode) - 1, [bitMode]);
@@ -103,6 +128,15 @@ export function BitwiseSimulator() {
     setIsAutoPlaying(false);
   }, []);
 
+  const handleFullReset = useCallback(() => {
+    setNumA("5");
+    setNumB("2");
+    setOperator("<<");
+    setBitMode(8);
+    setIsManualMode(false);
+    handleReset();
+  }, [handleReset]);
+
   const handleNextStep = useCallback(() => {
     setCurrentStep((prev) => {
       if (prev >= bitMode - 1) {
@@ -173,15 +207,15 @@ export function BitwiseSimulator() {
     isOverRangeB,
   ]);
 
-  const isShift = operator === "<<" || operator === ">>";
-
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <Card className="lg:col-span-8 border-slate-200 shadow-sm">
-          <CardHeader className="pb-4 border-b">
-            <CardTitle className="text-lg">연산 설정 및 제어</CardTitle>
-          </CardHeader>
+        <Card className="lg:col-span-8 border-slate-200 shadow-sm overflow-hidden">
+          <ToolHeader
+            title="연산 설정 및 제어"
+            icon={Binary}
+            onReset={handleFullReset}
+          />
           <CardContent className="pt-6 space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-4">
@@ -201,6 +235,7 @@ export function BitwiseSimulator() {
                     value={numA}
                     onChange={(e) => {
                       setNumA(e.target.value);
+                      setIsManualMode(false); // 입력 시 다시 자동 모드로 전환
                       handleReset();
                     }}
                     className={cn(
@@ -228,6 +263,7 @@ export function BitwiseSimulator() {
                       value={numB}
                       onChange={(e) => {
                         setNumB(e.target.value);
+                        setIsManualMode(false); // 입력 시 다시 자동 모드로 전환
                         handleReset();
                       }}
                       className={cn(
@@ -308,7 +344,9 @@ export function BitwiseSimulator() {
             <Tabs
               value={bitMode.toString()}
               onValueChange={(v) => {
-                setBitMode(parseInt(v) as BitMode);
+                const newMode = parseInt(v) as BitMode;
+                setBitMode(newMode);
+                setIsManualMode(true); // 사용자가 직접 탭을 누르면 수동 모드 활성화
                 handleReset();
               }}
             >
@@ -453,12 +491,24 @@ export function BitwiseSimulator() {
       </Card>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <ResultBox label="10진수 (Decimal)" value={result.toString()} />
+        <ResultBox
+          label="10진수 (Decimal)"
+          value={result.toString()}
+          copyLabel="10진수 결과"
+        />
         <ResultBox
           label="16진수 (Hex)"
-          value={`0x${result.toString(16).toUpperCase()}`}
+          value={`0x${result
+            .toString(16)
+            .toUpperCase()
+            .padStart(bitMode / 4, "0")}`}
+          copyLabel="16진수 결과"
         />
-        <ResultBox label="2진수 (Binary)" value={bitsResult.join("")} />
+        <ResultBox
+          label="2진수 (Binary)"
+          value={bitsResult.join("")}
+          copyLabel="2진수 결과"
+        />
       </div>
     </div>
   );
@@ -567,15 +617,39 @@ function BitRow({
   );
 }
 
-function ResultBox({ label, value }: { label: string; value: string }) {
+function ResultBox({
+  label,
+  value,
+  copyLabel,
+}: {
+  label: string;
+  value: string;
+  copyLabel: string;
+}) {
   return (
-    <div className="bg-white border rounded-xl p-4 shadow-sm space-y-1 hover:border-blue-200 transition-all hover:shadow-md">
+    <div className="group relative bg-white border rounded-xl p-4 shadow-sm space-y-1 hover:border-blue-200 transition-all hover:shadow-md">
       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">
         {label}
       </p>
-      <p className="text-lg font-mono font-bold text-slate-800 break-all">
-        {value}
-      </p>
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-lg font-mono font-bold text-slate-800 break-all">
+          {value}
+        </p>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="h-8 w-8 text-slate-300 hover:text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={() => {
+            navigator.clipboard.writeText(value);
+            import("sonner").then(({ toast }) =>
+              toast.success(`${copyLabel} 복사 완료!`),
+            );
+          }}
+        >
+          <Copy className="h-3.5 w-3.5" />
+          <span className="sr-only">복사</span>
+        </Button>
+      </div>
     </div>
   );
 }
