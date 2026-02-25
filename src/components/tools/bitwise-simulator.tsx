@@ -155,7 +155,6 @@ export function BitwiseSimulator() {
       <Card className="border-slate-200 shadow-sm overflow-hidden">
         <CardHeader className="bg-slate-50/50 border-b">
           <CardTitle className="text-lg">비트 시각화 시뮬레이션</CardTitle>
-          <CardDescription>4비트 단위로 그룹화되어 가독성이 높습니다.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           <div className="p-8">
