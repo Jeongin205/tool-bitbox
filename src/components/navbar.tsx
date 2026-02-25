@@ -23,6 +23,9 @@ export function Navbar() {
   // 메뉴 토글 함수
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  const tools = SITE_MENU.filter((item) => item.id !== "quiz");
+  const quiz = SITE_MENU.find((item) => item.id === "quiz");
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -49,7 +52,7 @@ export function Navbar() {
                   <NavigationMenuTrigger>도구 모음</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                      {SITE_MENU.map((item) => (
+                      {tools.map((item) => (
                         <ListItem
                           key={item.title}
                           title={item.title}
@@ -61,6 +64,18 @@ export function Navbar() {
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+                {quiz && (
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href={quiz.href}
+                        className={navigationMenuTriggerStyle()}
+                      >
+                        {quiz.title}
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                )}
                 <NavigationMenuItem>
                   <NavigationMenuLink asChild>
                     <Link
@@ -122,7 +137,7 @@ export function Navbar() {
                 Tools
               </h4>
               <div className="grid grid-cols-1 gap-2">
-                {SITE_MENU.map((item) => (
+                {tools.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
@@ -130,8 +145,6 @@ export function Navbar() {
                     className="flex items-center justify-between rounded-md p-3 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors bg-slate-50/50"
                   >
                     <div className="flex items-center gap-3">
-                      {/* 아이콘이 있다면 렌더링, 없다면 생략 */}
-                      {/* <item.icon className="h-4 w-4 text-slate-400" /> */}
                       {item.title}
                     </div>
                     <ChevronRight className="h-4 w-4 text-slate-300" />
@@ -139,6 +152,25 @@ export function Navbar() {
                 ))}
               </div>
             </div>
+
+            {/* 퀴즈 메뉴 추가 */}
+            {quiz && (
+              <div className="space-y-3">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  Learning
+                </h4>
+                <Link
+                  href={quiz.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center justify-between rounded-md p-3 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    {quiz.title}
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-blue-400" />
+                </Link>
+              </div>
+            )}
 
             {/* 메뉴 그룹 2: 일반 링크 */}
             <div className="space-y-3">
