@@ -16,7 +16,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { Info, HelpCircle } from "lucide-react";
 
-type BitMode = 8 | 16 | 32;
+type BitMode = 4 | 8 | 16;
 type Operator = "&" | "|" | "^" | "~" | "<<" | ">>";
 
 export function BitwiseSimulator() {
@@ -28,12 +28,14 @@ export function BitwiseSimulator() {
   // 입력을 숫자로 변환
   const valA = useMemo(() => {
     const parsed = parseInt(numA || "0");
-    return isNaN(parsed) ? 0 : parsed & (Math.pow(2, bitMode) - 1);
+    const mask = Math.pow(2, bitMode) - 1;
+    return isNaN(parsed) ? 0 : parsed & mask;
   }, [numA, bitMode]);
 
   const valB = useMemo(() => {
     const parsed = parseInt(numB || "0");
-    return isNaN(parsed) ? 0 : parsed & (Math.pow(2, bitMode) - 1);
+    const mask = Math.pow(2, bitMode) - 1;
+    return isNaN(parsed) ? 0 : parsed & mask;
   }, [numB, bitMode]);
 
   // 연산 결과 계산
@@ -46,13 +48,12 @@ export function BitwiseSimulator() {
       case "|": res = valA | valB; break;
       case "^": res = valA ^ valB; break;
       case "~": res = ~valA; break;
-      case "<<": res = valA << (valB % bitMode); break;
-      case ">>": res = valA >> (valB % bitMode); break;
+      case "<<": res = valA << (parseInt(numB) % bitMode); break;
+      case ">>": res = valA >> (parseInt(numB) % bitMode); break;
     }
     
-    // 비트 모드에 맞게 마스킹 (부호 있는 비트 처리 주의)
-    return res & (bitMode === 32 ? 0xFFFFFFFF : (1 << bitMode) - 1);
-  }, [valA, valB, operator, bitMode]);
+    return res & mask;
+  }, [valA, valB, numB, operator, bitMode]);
 
   // 비트 배열 생성 (MSB -> LSB 순서)
   const getBits = (val: number, bits: number) => {
@@ -129,20 +130,20 @@ export function BitwiseSimulator() {
           <CardContent className="pt-6">
             <Tabs value={bitMode.toString()} onValueChange={(v) => setBitMode(parseInt(v) as BitMode)}>
               <TabsList className="grid grid-cols-3 w-full">
+                <TabsTrigger value="4">4-bit</TabsTrigger>
                 <TabsTrigger value="8">8-bit</TabsTrigger>
                 <TabsTrigger value="16">16-bit</TabsTrigger>
-                <TabsTrigger value="32">32-bit</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-dashed border-slate-200">
               <div className="flex items-start gap-2 text-xs text-slate-500">
                 <Info className="w-4 h-4 mt-0.5 text-blue-500 shrink-0" />
                 <p>
+                  {bitMode === 4 && "4비트 모드 (0 ~ 15)"}
                   {bitMode === 8 && "8비트 모드 (0 ~ 255)"}
                   {bitMode === 16 && "16비트 모드 (0 ~ 65,535)"}
-                  {bitMode === 32 && "32비트 모드 (0 ~ 4,294,967,295)"}
                   <br />
-                  범위를 초과하는 입력값은 자동으로 마스킹 처리됩니다.
+                  한눈에 보기 편한 범위로 제한되었습니다.
                 </p>
               </div>
             </div>
@@ -154,19 +155,26 @@ export function BitwiseSimulator() {
       <Card className="border-slate-200 shadow-sm overflow-hidden">
         <CardHeader className="bg-slate-50/50 border-b">
           <CardTitle className="text-lg">비트 시각화 시뮬레이션</CardTitle>
-          <CardDescription>각 비트 단위로 연산이 이루어지는 과정을 확인하세요.</CardDescription>
+          <CardDescription>4비트 단위로 그룹화되어 가독성이 높습니다.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-x-auto p-8">
-            <div className="min-w-[600px] space-y-1">
+          <div className="p-8">
+            <div className="space-y-1">
               {/* Bit Index Header */}
-              <div className="flex justify-end mb-4 pr-12">
-                <div className="grid grid-flow-col auto-cols-[32px] gap-1">
-                  {Array.from({ length: bitMode }).map((_, i) => (
-                    <div key={i} className="text-[10px] text-center font-mono text-slate-400">
-                      {bitMode - 1 - i}
+              <div className="flex justify-end mb-4 pr-10">
+                <div className="flex gap-4">
+                  {Array.from({ length: bitMode / 4 }).map((_, groupIdx) => (
+                    <div key={groupIdx} className="flex gap-1">
+                      {Array.from({ length: 4 }).map((_, i) => {
+                        const idx = bitMode - 1 - (groupIdx * 4 + i);
+                        return (
+                          <div key={idx} className="w-8 text-[10px] text-center font-mono text-slate-400">
+                            {idx}
+                          </div>
+                        );
+                      })}
                     </div>
-                  ))}
+                  )).reverse()}
                 </div>
               </div>
 
@@ -176,21 +184,21 @@ export function BitwiseSimulator() {
               {/* Operator & Operand B */}
               {operator !== "~" ? (
                 <>
-                  <div className="flex items-center justify-between py-1 pr-12">
-                    <div className="text-sm font-bold text-slate-400 pl-4">{operator}</div>
+                  <div className="flex items-center justify-between py-1 pr-10">
+                    <div className="text-sm font-bold text-slate-400 pl-4 w-24 shrink-0">{operator}</div>
                     <div className="h-px bg-slate-100 flex-1 mx-4" />
                   </div>
                   <BitRow label="Value B" bits={bitsB} color="emerald" />
                 </>
               ) : (
-                <div className="flex items-center justify-between py-4 pr-12">
-                  <div className="text-sm font-bold text-slate-400 pl-4">NOT (~)</div>
+                <div className="flex items-center justify-between py-4 pr-10">
+                  <div className="text-sm font-bold text-slate-400 pl-4 w-24 shrink-0">NOT (~)</div>
                   <div className="h-px bg-slate-100 flex-1 mx-4" />
                 </div>
               )}
 
               {/* Result Line */}
-              <div className="flex items-center pr-12 pt-2 pb-4">
+              <div className="flex items-center pr-10 pt-2 pb-4">
                 <div className="h-0.5 bg-slate-900 w-full ml-24" />
               </div>
 
@@ -200,6 +208,7 @@ export function BitwiseSimulator() {
           </div>
         </CardContent>
       </Card>
+
 
       {/* 3. 최종 결과 수치 */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -224,9 +233,9 @@ function BitRow({
   isResult?: boolean;
 }) {
   const colorMap = {
-    blue: "bg-blue-600 text-white",
-    emerald: "bg-emerald-600 text-white",
-    rose: "bg-rose-600 text-white",
+    blue: "bg-blue-600 text-white border-blue-700",
+    emerald: "bg-emerald-600 text-white border-emerald-700",
+    rose: "bg-rose-600 text-white border-rose-700",
   };
 
   const bgColorMap = {
@@ -234,6 +243,12 @@ function BitRow({
     emerald: "bg-emerald-50 text-emerald-700 border-emerald-200",
     rose: "bg-rose-50 text-rose-700 border-rose-200",
   };
+
+  // 비트를 4개씩 묶기
+  const bitGroups = [];
+  for (let i = 0; i < bits.length; i += 4) {
+    bitGroups.push(bits.slice(i, i + 4));
+  }
 
   return (
     <div className="flex items-center group">
@@ -243,17 +258,21 @@ function BitRow({
       )}>
         {label}
       </div>
-      <div className="flex-1 flex justify-end gap-1 p-2 bg-slate-50/50 border-y border-r rounded-r-md min-h-[50px] items-center pr-10">
-        <div className="grid grid-flow-col auto-cols-[32px] gap-1">
-          {bits.map((bit, i) => (
-            <div
-              key={i}
-              className={cn(
-                "h-8 flex items-center justify-center font-mono font-bold rounded-sm transition-all duration-200 border shadow-sm",
-                bit === 1 ? colorMap[color] : "bg-white text-slate-300 border-slate-200"
-              )}
-            >
-              {bit}
+      <div className="flex-1 flex justify-end gap-4 p-2 bg-slate-50/50 border-y border-r rounded-r-md min-h-[50px] items-center pr-10">
+        <div className="flex gap-4">
+          {bitGroups.map((group, groupIdx) => (
+            <div key={groupIdx} className="flex gap-1">
+              {group.map((bit, i) => (
+                <div
+                  key={i}
+                  className={cn(
+                    "w-8 h-8 flex items-center justify-center font-mono font-bold rounded-sm transition-all duration-200 border shadow-sm",
+                    bit === 1 ? colorMap[color] : "bg-white text-slate-300 border-slate-200"
+                  )}
+                >
+                  {bit}
+                </div>
+              ))}
             </div>
           ))}
         </div>
