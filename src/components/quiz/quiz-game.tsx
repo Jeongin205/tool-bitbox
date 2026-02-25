@@ -177,51 +177,71 @@ export function QuizGame({ config, onFinish }: QuizGameProps) {
         </div>
 
         {/* 정답 입력 폼 */}
-        <form
-          onSubmit={handleSubmit}
-          className="flex gap-2 max-w-md mx-auto relative"
-        >
-          <Input
-            ref={inputRef}
-            type="text"
-            placeholder={`${currentQuestion.toBase}진수 값 입력...`}
-            value={userAnswer}
-            onChange={(e) => setUserAnswer(e.target.value)}
-            disabled={status !== "playing"}
-            className={cn(
-              "h-14 text-lg font-mono text-center border-2 transition-all",
-              status === "playing" &&
-                "focus-visible:ring-blue-500 focus-visible:border-blue-500",
-              status === "correct" &&
-                "border-green-500 bg-green-50 text-green-700",
-              status === "wrong" && "border-red-500 bg-red-50 text-red-700",
-            )}
-            autoFocus
-            autoComplete="off"
-          />
-
-          {/* 제출/다음 버튼 */}
-          {status === "playing" ? (
-            <Button type="submit" size="lg" className="h-14 px-6">
-              제출
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              onClick={handleNext}
-              size="lg"
+        <div className="space-y-3">
+          <form
+            onSubmit={handleSubmit}
+            className="flex gap-2 max-w-md mx-auto relative"
+          >
+            <Input
+              ref={inputRef}
+              type="text"
+              placeholder={
+                currentQuestion.toBase === 2 
+                  ? "0".padStart(config.bitDepth, "0") 
+                  : currentQuestion.toBase === 16 && config.bitDepth === 8
+                  ? "00"
+                  : `${currentQuestion.toBase}진수 값 입력...`
+              }
+              value={userAnswer}
+              onChange={(e) => setUserAnswer(e.target.value)}
+              disabled={status !== "playing"}
               className={cn(
-                "h-14 px-6 animate-in fade-in",
-                status === "correct"
-                  ? "bg-green-600 hover:bg-green-700"
-                  : "bg-slate-900",
+                "h-14 text-lg font-mono text-center border-2 transition-all",
+                status === "playing" &&
+                  "focus-visible:ring-blue-500 focus-visible:border-blue-500",
+                status === "correct" &&
+                  "border-green-500 bg-green-50 text-green-700",
+                status === "wrong" && "border-red-500 bg-red-50 text-red-700",
               )}
-            >
-              {currentIndex + 1 === questions.length ? "결과" : "다음"}{" "}
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
+              autoFocus
+              autoComplete="off"
+            />
+
+            {/* 제출/다음 버튼 */}
+            {status === "playing" ? (
+              <Button type="submit" size="lg" className="h-14 px-6">
+                제출
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                onClick={handleNext}
+                size="lg"
+                className={cn(
+                  "h-14 px-6 animate-in fade-in",
+                  status === "correct"
+                    ? "bg-green-600 hover:bg-green-700"
+                    : "bg-slate-900",
+                )}
+              >
+                {currentIndex + 1 === questions.length ? "결과" : "다음"}{" "}
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            )}
+          </form>
+
+          {/* 자릿수 안내 메시지 */}
+          {status === "playing" && (
+            <p className="text-xs text-slate-400 animate-pulse">
+              {currentQuestion.toBase === 2 && (
+                <span>2진수는 <strong>{config.bitDepth}자리</strong>를 모두 채워주세요. (예: {"0".padStart(config.bitDepth, "0")})</span>
+              )}
+              {currentQuestion.toBase === 16 && config.bitDepth === 8 && (
+                <span>16진수는 <strong>2자리</strong>를 채워주세요. (예: 00)</span>
+              )}
+            </p>
           )}
-        </form>
+        </div>
 
         {/* 정답/오답 피드백 메시지 */}
         {status !== "playing" && (
