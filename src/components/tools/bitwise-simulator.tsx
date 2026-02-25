@@ -344,10 +344,10 @@ export function BitwiseSimulator() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="p-8 overflow-x-auto">
+          <div className="p-4 sm:p-8 overflow-x-auto">
             <div className="min-w-max space-y-1">
-              <div className="flex justify-end mb-4 pr-10">
-                <div className="flex gap-4">
+              <div className="flex justify-end mb-4 pr-2 sm:pr-10">
+                <div className="flex gap-2 sm:gap-4">
                   {Array.from({ length: bitMode / 4 }).map((_, groupIdx) => (
                     <div key={groupIdx} className="flex gap-1">
                       {Array.from({ length: 4 }).map((_, i) => {
@@ -356,7 +356,7 @@ export function BitwiseSimulator() {
                           <div
                             key={idx}
                             className={cn(
-                              "w-8 text-[10px] text-center font-mono transition-colors",
+                              "w-7 sm:w-8 text-[10px] text-center font-mono transition-colors",
                               currentStep === idx
                                 ? "text-blue-600 font-bold scale-125"
                                 : "text-slate-400",
@@ -383,11 +383,11 @@ export function BitwiseSimulator() {
 
               {!isShift && operator !== "~" && (
                 <>
-                  <div className="flex items-center justify-between py-1 pr-10">
-                    <div className="text-sm font-bold text-slate-400 pl-4 w-24 shrink-0 font-mono">
+                  <div className="flex items-center justify-between py-1 pr-2 sm:pr-10">
+                    <div className="text-sm font-bold text-slate-400 sm:pl-4 w-10 sm:w-24 shrink-0 font-mono text-center sm:text-left">
                       {operator}
                     </div>
-                    <div className="h-px bg-slate-200 flex-1 mx-4" />
+                    <div className="h-px bg-slate-200 flex-1 mx-2 sm:mx-4" />
                   </div>
                   <BitRow
                     label="Value B"
@@ -402,7 +402,7 @@ export function BitwiseSimulator() {
               )}
 
               {isShift && (
-                <div className="flex items-center py-4 pr-10 pl-24">
+                <div className="flex items-center py-4 pr-2 sm:pr-10 sm:pl-24">
                   <div className="flex-1 flex items-center justify-center gap-2 text-slate-400 bg-white/50 border border-dashed rounded-lg py-2">
                     {operator === "<<" ? (
                       <>
@@ -424,7 +424,7 @@ export function BitwiseSimulator() {
               )}
 
               {operator === "~" && (
-                <div className="flex items-center py-4 pr-10 pl-24">
+                <div className="flex items-center py-4 pr-2 sm:pr-10 sm:pl-24">
                   <div className="flex-1 flex items-center justify-center gap-2 text-slate-400 bg-white/50 border border-dashed rounded-lg py-2">
                     <span className="text-xs font-bold uppercase font-mono">
                       NOT (~) - Bit Inversion
@@ -433,8 +433,8 @@ export function BitwiseSimulator() {
                 </div>
               )}
 
-              <div className="flex items-center pr-10 pt-2 pb-4">
-                <div className="h-0.5 bg-slate-900 w-full ml-24" />
+              <div className="flex items-center pr-2 sm:pr-10 pt-2 pb-4">
+                <div className="h-0.5 bg-slate-900 w-full sm:ml-24" />
               </div>
 
               <BitRow
@@ -495,10 +495,10 @@ function BitRow({
   }
 
   return (
-    <div className="flex items-center group">
+    <div className="flex flex-col sm:flex-row sm:items-center group">
       <div
         className={cn(
-          "w-24 text-[11px] font-bold px-3 py-2 rounded-l-md border transition-all shrink-0 uppercase tracking-tighter",
+          "w-full sm:w-24 text-[10px] sm:text-[11px] font-bold px-3 py-1 sm:py-2 rounded-t-md sm:rounded-l-md sm:rounded-tr-none border transition-all shrink-0 uppercase tracking-tighter",
           isResult
             ? "bg-slate-900 text-white border-slate-900"
             : "bg-slate-50 text-slate-600 border-slate-200",
@@ -506,8 +506,8 @@ function BitRow({
       >
         {label}
       </div>
-      <div className="flex-1 flex justify-end gap-4 p-2 bg-white/50 border-y border-r rounded-r-md min-h-[52px] items-center pr-10 shadow-inner">
-        <div className="flex gap-4">
+      <div className="flex-1 flex justify-end gap-2 sm:gap-4 p-2 bg-white/50 border-x border-b sm:border-x-0 sm:border-y sm:border-r rounded-b-md sm:rounded-r-md sm:rounded-bl-none min-h-[44px] sm:min-h-[52px] items-center pr-2 sm:pr-10 shadow-inner">
+        <div className="flex gap-2 sm:gap-4">
           {bitGroups.map((group, groupIdx) => (
             <div key={groupIdx} className="flex gap-1">
               {group.map((bit, i) => {
@@ -529,7 +529,7 @@ function BitRow({
                   <div
                     key={i}
                     className={cn(
-                      "w-8 h-8 flex items-center justify-center font-mono font-bold rounded-sm border shadow-sm transition-all duration-300 relative",
+                      "w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center font-mono font-bold rounded-sm border shadow-sm transition-all duration-300 relative text-xs sm:text-base",
                       bit === 1 && shouldShowResultBit
                         ? colorMap[color]
                         : "bg-white text-slate-200 border-slate-100",
