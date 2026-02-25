@@ -16,6 +16,7 @@ import {
   MessageSquare,
   MoveRight,
   MoveLeft,
+  AlertCircle,
 } from "lucide-react";
 
 type BitMode = 4 | 8 | 16;
@@ -28,28 +29,37 @@ export function BitwiseSimulator() {
   const [bitMode, setBitMode] = useState<BitMode>(8);
 
   // 시뮬레이션 상태
-  const [currentStep, setCurrentStep] = useState<number>(-1); // -1: 대기, 0 ~ bitMode-1: 진행 중
+  const [currentStep, setCurrentStep] = useState<number>(-1);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
 
-  // 공통 마스크 및 쉬프트 양 계산
   const mask = useMemo(() => (1 << bitMode) - 1, [bitMode]);
+  const maxVal = useMemo(() => Math.pow(2, bitMode) - 1, [bitMode]);
   const shiftAmt = useMemo(
     () => (parseInt(numB) || 0) % bitMode,
     [numB, bitMode],
   );
 
-  // 입력을 숫자로 변환
-  const valA = useMemo(() => {
-    const parsed = parseInt(numA || "0");
-    return isNaN(parsed) ? 0 : parsed & mask;
-  }, [numA, mask]);
+  // 입력값 파싱 및 범위 체크
+  const rawValA = parseInt(numA || "0");
+  const rawValB = parseInt(numB || "0");
 
-  const valB = useMemo(() => {
-    const parsed = parseInt(numB || "0");
-    return isNaN(parsed) ? 0 : parsed & mask;
-  }, [numB, mask]);
+  const isOverRangeA = !isNaN(rawValA) && (rawValA > maxVal || rawValA < 0);
+  const isOverRangeB =
+    !isNaN(rawValB) &&
+    operator !== "<<" &&
+    operator !== ">>" &&
+    (rawValB > maxVal || rawValB < 0);
 
-  // 연산 결과 계산
+  const valA = useMemo(
+    () => (isNaN(rawValA) ? 0 : rawValA & mask),
+    [rawValA, mask],
+  );
+  const valB = useMemo(
+    () => (isNaN(rawValB) ? 0 : rawValB & mask),
+    [rawValB, mask],
+  );
+
+  // 연산 결과
   const result = useMemo(() => {
     let res = 0;
     switch (operator) {
@@ -75,7 +85,6 @@ export function BitwiseSimulator() {
     return res & mask;
   }, [valA, valB, shiftAmt, operator, mask]);
 
-  // 비트 배열 생성 (MSB -> LSB 순서)
   const getBits = (val: number, bits: number) => {
     return val
       .toString(2)
@@ -89,7 +98,6 @@ export function BitwiseSimulator() {
   const bitsB = useMemo(() => getBits(valB, bitMode), [valB, bitMode]);
   const bitsResult = useMemo(() => getBits(result, bitMode), [result, bitMode]);
 
-  // 시뮬레이션 제어
   const handleReset = useCallback(() => {
     setCurrentStep(-1);
     setIsAutoPlaying(false);
@@ -126,10 +134,12 @@ export function BitwiseSimulator() {
     return () => timer && clearInterval(timer);
   }, [isAutoPlaying, bitMode]);
 
-  // 단계별 메시지
   const stepMessage = useMemo(() => {
-    if (currentStep === -1)
+    if (currentStep === -1) {
+      if (isOverRangeA || isOverRangeB)
+        return "입력값이 범위를 초과하여 하위 비트만 마스킹되었습니다. 시뮬레이션을 시작해 과정을 확인하세요.";
       return "시뮬레이션 시작 버튼을 눌러 과정을 확인하세요.";
+    }
 
     const bitIdx = currentStep;
     const arrayIdx = bitMode - 1 - bitIdx;
@@ -151,7 +161,17 @@ export function BitwiseSimulator() {
     if (operator === "~") return `${bitIdx}번 비트 반전: ~${bA} = ${bR}`;
 
     return `${bitIdx}번 비트 연산: ${bA} ${operator} ${bitsB[arrayIdx]} = ${bR}`;
-  }, [currentStep, bitsA, bitsB, bitsResult, operator, bitMode, shiftAmt]);
+  }, [
+    currentStep,
+    bitsA,
+    bitsB,
+    bitsResult,
+    operator,
+    bitMode,
+    shiftAmt,
+    isOverRangeA,
+    isOverRangeB,
+  ]);
 
   const isShift = operator === "<<" || operator === ">>";
 
@@ -166,7 +186,15 @@ export function BitwiseSimulator() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="num-a">Value A (10진수)</Label>
+                  <div className="flex justify-between items-center">
+                    <Label htmlFor="num-a">Value A (10진수)</Label>
+                    {isOverRangeA && (
+                      <span className="text-[10px] font-bold text-amber-600 flex items-center gap-1 animate-pulse">
+                        <AlertCircle size={10} /> {bitMode}비트 마스킹됨 (실제:{" "}
+                        {valA})
+                      </span>
+                    )}
+                  </div>
                   <Input
                     id="num-a"
                     type="number"
@@ -175,14 +203,25 @@ export function BitwiseSimulator() {
                       setNumA(e.target.value);
                       handleReset();
                     }}
-                    className="font-mono h-11"
+                    className={cn(
+                      "font-mono h-11 transition-colors",
+                      isOverRangeA && "border-amber-200 bg-amber-50/50",
+                    )}
                   />
                 </div>
                 {operator !== "~" && (
                   <div className="space-y-2">
-                    <Label htmlFor="num-b">
-                      {isShift ? "Shift Amount" : "Value B (10진수)"}
-                    </Label>
+                    <div className="flex justify-between items-center">
+                      <Label htmlFor="num-b">
+                        {isShift ? "Shift Amount" : "Value B (10진수)"}
+                      </Label>
+                      {isOverRangeB && (
+                        <span className="text-[10px] font-bold text-amber-600 flex items-center gap-1 animate-pulse">
+                          <AlertCircle size={10} /> {bitMode}비트 마스킹됨
+                          (실제: {valB})
+                        </span>
+                      )}
+                    </div>
                     <Input
                       id="num-b"
                       type="number"
@@ -191,7 +230,10 @@ export function BitwiseSimulator() {
                         setNumB(e.target.value);
                         handleReset();
                       }}
-                      className="font-mono h-11"
+                      className={cn(
+                        "font-mono h-11 transition-colors",
+                        isOverRangeB && "border-amber-200 bg-amber-50/50",
+                      )}
                     />
                   </div>
                 )}
@@ -470,8 +512,6 @@ function BitRow({
             <div key={groupIdx} className="flex gap-1">
               {group.map((bit, i) => {
                 const bitIdx = bitMode - 1 - (groupIdx * 4 + i);
-
-                // 하이라이트 로직
                 let isActive = currentStep === bitIdx;
                 if (!isResult && (operator === "<<" || operator === ">>")) {
                   const targetIdx = currentStep;
