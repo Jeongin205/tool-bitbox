@@ -144,9 +144,7 @@ export function Navbar() {
                     onClick={() => setIsMenuOpen(false)} // 클릭 시 닫기
                     className="flex items-center justify-between rounded-md p-3 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 transition-colors bg-slate-50/50"
                   >
-                    <div className="flex items-center gap-3">
-                      {item.title}
-                    </div>
+                    <div className="flex items-center gap-3">{item.title}</div>
                     <ChevronRight className="h-4 w-4 text-slate-300" />
                   </Link>
                 ))}
@@ -164,9 +162,7 @@ export function Navbar() {
                   onClick={() => setIsMenuOpen(false)}
                   className="flex items-center justify-between rounded-md p-3 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors"
                 >
-                  <div className="flex items-center gap-3">
-                    {quiz.title}
-                  </div>
+                  <div className="flex items-center gap-3">{quiz.title}</div>
                   <ChevronRight className="h-4 w-4 text-blue-400" />
                 </Link>
               </div>

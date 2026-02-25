@@ -1,4 +1,4 @@
-import { Binary, Calculator, Palette, Trophy } from "lucide-react";
+import { Binary, Calculator, Palette, Trophy, Cpu } from "lucide-react";
 
 export type SiteConfig = (typeof SITE_MENU)[number];
 
@@ -18,6 +18,13 @@ export const SITE_MENU = [
     description:
       "컴퓨터 내부의 음수 표현 방식인 2의 보수(2's Complement)를 계산합니다.",
     icon: Calculator,
+  },
+  {
+    id: "bitwise",
+    title: "비트 연산 시뮬레이터",
+    href: "/tools/bitwise",
+    description: "비트 단위 연산(&, |, ^, ~, <<, >>)의 과정을 시각적으로 시뮬레이션합니다.",
+    icon: Cpu,
   },
   {
     id: "hex-color",
