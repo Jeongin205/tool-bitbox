@@ -16,7 +16,8 @@ export function HexColorConverter() {
 
   const handleColorChange = useCallback((newHex: string) => {
     setColor(newHex);
-    setError(null);
+    setHexError(null);
+    setRgbError(null);
   }, []);
 
   const handleHexInputChange = useCallback((value: string) => {
