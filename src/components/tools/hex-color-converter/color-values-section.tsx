@@ -16,7 +16,8 @@ import { cn } from "@/lib/utils";
 interface ColorValuesSectionProps {
   color: string;
   rgb: { r: number; g: number; b: number };
-  error: string | null;
+  hexError: string | null;
+  rgbError: string | null;
   onHexChange: (value: string) => void;
   onRgbChange: (channel: "r" | "g" | "b", value: string) => void;
 }
@@ -24,19 +25,22 @@ interface ColorValuesSectionProps {
 export function ColorValuesSection({
   color,
   rgb,
-  error,
+  hexError,
+  rgbError,
   onHexChange,
   onRgbChange,
 }: ColorValuesSectionProps) {
+  const displayError = rgbError || hexError;
+
   return (
     <Card className="border-slate-200 shadow-sm transition-all">
       <CardHeader className="pb-4 border-b ">
         <CardTitle className="text-lg">Color Values</CardTitle>
         <div className="h-5 flex items-center">
-          {error ? (
+          {displayError ? (
             <div className="flex items-center gap-1.5 text-red-600 animate-in fade-in slide-in-from-left-1 duration-200">
               <AlertCircle size={14} />
-              <span className="text-sm font-medium">{error}</span>
+              <span className="text-sm font-medium">{displayError}</span>
             </div>
           ) : (
             <CardDescription className="transition-all duration-200">
@@ -56,7 +60,7 @@ export function ColorValuesSection({
             onValueChange={onHexChange}
             className={cn(
               "bg-white hover:border-slate-400 focus:bg-white transition-all",
-              error && "border-red-500 focus-visible:ring-red-500 bg-red-50"
+              hexError && "border-red-500 focus-visible:ring-red-500 bg-red-50"
             )}
           />
         </div>
@@ -77,13 +81,13 @@ export function ColorValuesSection({
                 onChange={(e) => onRgbChange("r", e.target.value)}
                 className={cn(
                   "pl-8 bg-white transition-all hover:border-slate-400 focus:bg-white",
-                  error && "border-red-500 focus-visible:ring-red-500 bg-red-50"
+                  rgbError && "border-red-500 focus-visible:ring-red-500 bg-red-50"
                 )}
               />
               <span
                 className={cn(
                   "absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold transition-colors",
-                  error ? "text-red-600" : "text-red-500"
+                  rgbError ? "text-red-600" : "text-red-500"
                 )}
               >
                 R
@@ -106,13 +110,13 @@ export function ColorValuesSection({
                 onChange={(e) => onRgbChange("g", e.target.value)}
                 className={cn(
                   "pl-8 bg-white transition-all hover:border-slate-400 focus:bg-white",
-                  error && "border-red-500 focus-visible:ring-red-500 bg-red-50"
+                  rgbError && "border-red-500 focus-visible:ring-red-500 bg-red-50"
                 )}
               />
               <span
                 className={cn(
                   "absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold transition-colors",
-                  error ? "text-red-600" : "text-green-500"
+                  rgbError ? "text-red-600" : "text-green-500"
                 )}
               >
                 G
@@ -135,13 +139,13 @@ export function ColorValuesSection({
                 onChange={(e) => onRgbChange("b", e.target.value)}
                 className={cn(
                   "pl-8 bg-white transition-all hover:border-slate-400 focus:bg-white",
-                  error && "border-red-500 focus-visible:ring-red-500 bg-red-50"
+                  rgbError && "border-red-500 focus-visible:ring-red-500 bg-red-50"
                 )}
               />
               <span
                 className={cn(
                   "absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold transition-colors",
-                  error ? "text-red-600" : "text-blue-500"
+                  rgbError ? "text-red-600" : "text-blue-500"
                 )}
               >
                 B

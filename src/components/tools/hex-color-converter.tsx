@@ -4,16 +4,13 @@ import { useState, useMemo, useCallback } from "react";
 import { ColorPickerSection } from "./hex-color-converter/color-picker-section";
 import { ColorValuesSection } from "./hex-color-converter/color-values-section";
 import { ContrastRatioSection } from "./hex-color-converter/contrast-ratio-section";
-import {
-  hexToRgb,
-  rgbToHex,
-  getContrastRatio,
-} from "@/lib/color-utils";
+import { hexToRgb, rgbToHex, getContrastRatio } from "@/lib/color-utils";
 
 export function HexColorConverter() {
   const [color, setColor] = useState<string>("#3b82f6");
   const [textColor, setTextColor] = useState<"white" | "black">("white");
-  const [error, setError] = useState<string | null>(null);
+  const [hexError, setHexError] = useState<string | null>(null);
+  const [rgbError, setRgbError] = useState<string | null>(null);
 
   const rgb = useMemo(() => hexToRgb(color), [color]);
 
@@ -27,20 +24,23 @@ export function HexColorConverter() {
 
     // HEX Code validation (Length and valid hex characters)
     if (hex.length > 7) {
-      setError("HEX 코드는 최대 6자리입니다.");
-      setTimeout(() => setError(null), 2000);
+      setHexError("HEX 코드는 최대 6자리입니다.");
+      setRgbError(null);
+      setTimeout(() => setHexError(null), 2000);
       return;
     }
 
     const hexPattern = /^#([A-Fa-f0-9]*)$/;
     if (!hexPattern.test(hex)) {
-      setError("HEX 코드는 0-9, A-F 사이의 문자여야 합니다.");
-      setTimeout(() => setError(null), 2000);
+      setHexError("HEX 코드는 0-9, A-F 사이의 문자여야 합니다.");
+      setRgbError(null);
+      setTimeout(() => setHexError(null), 2000);
       return;
     }
 
     setColor(hex);
-    setError(null);
+    setHexError(null);
+    setRgbError(null);
   }, []);
 
   const handleRgbChange = (channel: "r" | "g" | "b", value: string) => {
@@ -49,12 +49,14 @@ export function HexColorConverter() {
     if (isNaN(num)) return;
 
     if (num < 0 || num > 255) {
-      setError("RGB 값은 0 ~ 255 사이의 숫자여야 합니다.");
-      setTimeout(() => setError(null), 2000);
+      setRgbError("RGB 값은 0 ~ 255 사이의 숫자여야 합니다.");
+      setHexError(null);
+      setTimeout(() => setRgbError(null), 2000);
       return;
     }
 
-    setError(null);
+    setRgbError(null);
+    setHexError(null);
     const newRgb = { ...rgb, [channel]: num };
     const newHex = rgbToHex(newRgb.r, newRgb.g, newRgb.b);
     setColor(newHex);
@@ -66,45 +68,33 @@ export function HexColorConverter() {
   }, [color, textColor]);
 
   return (
-    <>
-      <style jsx global>{`
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-4px); }
-          75% { transform: translateX(4px); }
-        }
-        .animate-shake {
-          animation: shake 0.2s ease-in-out 0s 2;
-        }
-      `}</style>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* [1] Color Values (Mobile: 1st, Desktop: Right Top) */}
-        <div className="order-1 lg:order-2 lg:col-span-7 font-mono">
-          <ColorValuesSection
-            color={color}
-            rgb={rgb}
-            error={error}
-            onHexChange={handleHexInputChange}
-            onRgbChange={handleRgbChange}
-          />
-        </div>
-
-        {/* [2] Color Picker (Mobile: 2nd, Desktop: Left Side) */}
-        <div className="order-2 lg:order-1 lg:col-span-5 lg:row-span-2 space-y-6">
-          <ColorPickerSection
-            color={color}
-            textColor={textColor}
-            onColorChange={handleColorChange}
-            onTextColorChange={setTextColor}
-          />
-        </div>
-
-        {/* [3] Contrast Ratio (Mobile: 3rd, Desktop: Right Bottom) */}
-        <div className="order-3 lg:order-3 lg:col-span-7">
-          <ContrastRatioSection contrastRatio={contrastRatio} />
-        </div>
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* [1] Color Values (Mobile: 1st, Desktop: Right Top) */}
+      <div className="order-1 lg:order-2 lg:col-span-7 font-mono">
+        <ColorValuesSection
+          color={color}
+          rgb={rgb}
+          hexError={hexError}
+          rgbError={rgbError}
+          onHexChange={handleHexInputChange}
+          onRgbChange={handleRgbChange}
+        />
       </div>
-    </>
+
+      {/* [2] Color Picker (Mobile: 2nd, Desktop: Left Side) */}
+      <div className="order-2 lg:order-1 lg:col-span-5 lg:row-span-2 space-y-6">
+        <ColorPickerSection
+          color={color}
+          textColor={textColor}
+          onColorChange={handleColorChange}
+          onTextColorChange={setTextColor}
+        />
+      </div>
+
+      {/* [3] Contrast Ratio (Mobile: 3rd, Desktop: Right Bottom) */}
+      <div className="order-3 lg:order-3 lg:col-span-7">
+        <ContrastRatioSection contrastRatio={contrastRatio} />
+      </div>
+    </div>
   );
 }
