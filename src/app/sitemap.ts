@@ -25,14 +25,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.8,
     },
-    // 4. HEX 색상 추출기 (Hex Color) - New!
+    // 4. HEX 색상 추출기 (Hex Color)
     {
       url: `${baseUrl}/tools/color`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
     },
-    // 5. 진법 변환 퀴즈 (Quiz)
+    // 5. 비트 연산 시뮬레이터 (Bitwise Simulator)
+    {
+      url: `${baseUrl}/tools/bitwise`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    // 6. 진법 변환 퀴즈 (Quiz)
     {
       url: `${baseUrl}/quiz`,
       lastModified: new Date(),
