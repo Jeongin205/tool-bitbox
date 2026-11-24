@@ -29,33 +29,27 @@ export function BitwiseSimulator() {
   const [numA, setNumA] = useState<string>("5");
   const [numB, setNumB] = useState<string>("2");
   const [operator, setOperator] = useState<Operator>("<<");
-  const [bitMode, setBitMode] = useState<BitMode>(8);
+  // 수동 모드: 사용자가 탭을 직접 클릭하면 true로 전환 (자동 비트 모드 조절 비활성화)
+  const [manualBitMode, setManualBitMode] = useState<BitMode | null>(null);
 
   // 시뮬레이션 상태
   const [currentStep, setCurrentStep] = useState<number>(-1);
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
-  const [isManualMode, setIsManualMode] = useState(false);
 
   const isShift = operator === "<<" || operator === ">>";
 
-  // 입력값에 따른 비트 모드 자동 조절
-  useEffect(() => {
-    if (isManualMode) return; // 수동 모드(탭 클릭 이후)라면 절대 개입하지 않음
+  // 비트 모드: 수동 선택이 있으면 그 값 사용, 없으면 입력값으로부터 자동 계산 (파생 상태)
+  const bitMode = useMemo<BitMode>(() => {
+    if (manualBitMode !== null) return manualBitMode;
 
     const vA = Math.abs(parseInt(numA) || 0);
     const vB = operator === "~" || isShift ? 0 : Math.abs(parseInt(numB) || 0);
     const maxV = Math.max(vA, vB);
 
-    let nextMode: BitMode = 4;
-    if (maxV > 255) nextMode = 16;
-    else if (maxV > 15) nextMode = 8;
-
-    if (nextMode !== bitMode) {
-      setBitMode(nextMode);
-      setCurrentStep(-1);
-      setIsAutoPlaying(false);
-    }
-  }, [numA, numB, operator, isShift, bitMode, isManualMode]);
+    if (maxV > 255) return 16;
+    if (maxV > 15) return 8;
+    return 4;
+  }, [numA, numB, operator, isShift, manualBitMode]);
 
   const mask = useMemo(() => (1 << bitMode) - 1, [bitMode]);
   const maxVal = useMemo(() => Math.pow(2, bitMode) - 1, [bitMode]);
@@ -132,8 +126,7 @@ export function BitwiseSimulator() {
     setNumA("5");
     setNumB("2");
     setOperator("<<");
-    setBitMode(8);
-    setIsManualMode(false);
+    setManualBitMode(null); // 수동 모드 초기화 → 자동 계산으로 복귀
     handleReset();
   }, [handleReset]);
 
@@ -235,7 +228,7 @@ export function BitwiseSimulator() {
                     value={numA}
                     onChange={(e) => {
                       setNumA(e.target.value);
-                      setIsManualMode(false); // 입력 시 다시 자동 모드로 전환
+                      setManualBitMode(null); // 입력 시 다시 자동 모드로 전환
                       handleReset();
                     }}
                     className={cn(
@@ -263,7 +256,7 @@ export function BitwiseSimulator() {
                       value={numB}
                       onChange={(e) => {
                         setNumB(e.target.value);
-                        setIsManualMode(false); // 입력 시 다시 자동 모드로 전환
+                        setManualBitMode(null); // 입력 시 다시 자동 모드로 전환
                         handleReset();
                       }}
                       className={cn(
@@ -345,8 +338,7 @@ export function BitwiseSimulator() {
               value={bitMode.toString()}
               onValueChange={(v) => {
                 const newMode = parseInt(v) as BitMode;
-                setBitMode(newMode);
-                setIsManualMode(true); // 사용자가 직접 탭을 누르면 수동 모드 활성화
+                setManualBitMode(newMode); // 사용자가 직접 탭을 누르면 수동 모드 활성화
                 handleReset();
               }}
             >

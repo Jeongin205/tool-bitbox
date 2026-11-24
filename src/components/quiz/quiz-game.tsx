@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { ArrowRight, CheckCircle2, XCircle, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,8 +24,66 @@ interface QuizGameProps {
   onFinish: (score: number, total: number) => void;
 }
 
+// config로부터 값 포매팅 함수 (순수 함수 — 컴포넌트 외부로 분리)
+function formatValue(
+  val: number,
+  base: number,
+  isSigned: boolean,
+  bits: number,
+): string {
+  if (base === 10 && isSigned) {
+    const msb = 1 << (bits - 1);
+    if ((val & msb) === msb) {
+      return String(val - (1 << bits));
+    }
+  }
+  let str = val.toString(base).toUpperCase();
+  if (base === 2) str = str.padStart(bits, "0");
+  if (base === 16 && bits === 8) str = str.padStart(2, "0");
+  return str;
+}
+
+// config를 받아 문제 목록을 생성하는 순수 함수 (useEffect 불필요)
+function generateQuestions(config: QuizConfig): Question[] {
+  const questions: Question[] = [];
+  const max = Math.pow(2, config.bitDepth);
+  const isSigned = config.mode === "signed";
+
+  for (let i = 0; i < config.questionCount; i++) {
+    const rawValue = Math.floor(Math.random() * max);
+
+    const fromBase =
+      config.selectedBases[
+        Math.floor(Math.random() * config.selectedBases.length)
+      ];
+    let toBase =
+      config.selectedBases[
+        Math.floor(Math.random() * config.selectedBases.length)
+      ];
+
+    while (fromBase === toBase) {
+      toBase =
+        config.selectedBases[
+          Math.floor(Math.random() * config.selectedBases.length)
+        ];
+    }
+
+    questions.push({
+      id: i,
+      value: rawValue,
+      fromBase,
+      toBase,
+      questionText: formatValue(rawValue, fromBase, isSigned, config.bitDepth),
+      answerText: formatValue(rawValue, toBase, isSigned, config.bitDepth),
+    });
+  }
+  return questions;
+}
+
 export function QuizGame({ config, onFinish }: QuizGameProps) {
-  const [questions, setQuestions] = useState<Question[]>([]);
+  // config가 변경될 때마다 문제 목록을 파생 상태로 계산 (useEffect + setState 불필요)
+  const questions = useMemo(() => generateQuestions(config), [config]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
   const [status, setStatus] = useState<"playing" | "correct" | "wrong">(
@@ -35,73 +93,6 @@ export function QuizGame({ config, onFinish }: QuizGameProps) {
   const [showScratchpad, setShowScratchpad] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // 1. 게임 시작 시 문제 생성
-  useEffect(() => {
-    const newQuestions: Question[] = [];
-
-    for (let i = 0; i < config.questionCount; i++) {
-      const max = Math.pow(2, config.bitDepth);
-      const rawValue = Math.floor(Math.random() * max);
-
-      const fromBase =
-        config.selectedBases[
-          Math.floor(Math.random() * config.selectedBases.length)
-        ];
-      let toBase =
-        config.selectedBases[
-          Math.floor(Math.random() * config.selectedBases.length)
-        ];
-
-      while (fromBase === toBase) {
-        toBase =
-          config.selectedBases[
-            Math.floor(Math.random() * config.selectedBases.length)
-          ];
-      }
-
-      const formatValue = (
-        val: number,
-        base: number,
-        isSigned: boolean,
-        bits: number,
-      ) => {
-        if (base === 10 && isSigned) {
-          const msb = 1 << (bits - 1);
-          if ((val & msb) === msb) {
-            return String(val - (1 << bits));
-          }
-        }
-
-        let str = val.toString(base).toUpperCase();
-        if (base === 2) str = str.padStart(bits, "0");
-        if (base === 16 && bits === 8) str = str.padStart(2, "0");
-
-        return str;
-      };
-
-      newQuestions.push({
-        id: i,
-        value: rawValue,
-        fromBase,
-        toBase,
-        questionText: formatValue(
-          rawValue,
-          fromBase,
-          config.mode === "signed",
-          config.bitDepth,
-        ),
-        answerText: formatValue(
-          rawValue,
-          toBase,
-          config.mode === "signed",
-          config.bitDepth,
-        ),
-      });
-    }
-
-    setQuestions(newQuestions);
-  }, [config]);
 
   const currentQuestion = questions[currentIndex];
 
@@ -139,8 +130,7 @@ export function QuizGame({ config, onFinish }: QuizGameProps) {
     }
   };
 
-  if (questions.length === 0)
-    return <div className="p-10 text-center">문제 생성 중...</div>;
+  if (questions.length === 0 || !currentQuestion) return null;
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">
