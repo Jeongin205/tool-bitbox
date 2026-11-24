@@ -25,17 +25,50 @@ export const metadata: Metadata = {
 export default function TwosPage() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "ToolBitBox 2의 보수 계산기",
-    operatingSystem: "Any",
-    applicationCategory: "EducationalApplication",
-    description:
-      "입력한 숫자를 4/8/16/32비트 기반의 2의 보수(Two's Complement) 형태로 즉시 계산해주는 도구입니다.",
-    offers: {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD",
-    },
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        name: "ToolBitBox 2의 보수 계산기",
+        operatingSystem: "Any",
+        applicationCategory: "EducationalApplication",
+        description:
+          "입력한 숫자를 4/8/16/32비트 기반의 2의 보수(Two's Complement) 형태로 즉시 계산해주는 도구입니다.",
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+        },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "비트 수가 늘어나면 음수 2의 보수 값은 어떻게 되나요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "음수의 경우 가장 앞의 부호 비트(1)를 왼쪽으로 확장(Sign Extension)합니다. 예를 들어 8비트 -5는 16비트가 되어도 여전히 같은 값을 유지하도록 상위 비트에 1이 채워집니다.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "오버플로우(Overflow)란 무엇인가요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "계산 결과가 해당 비트 수로 표현할 수 있는 범위를 넘어설 때 발생합니다. 8비트 2의 보수 표현 범위는 -128부터 +127까지입니다.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "1의 보수와 2의 보수의 차이는 무엇인가요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "1의 보수는 비트를 단순히 반전(0은 1로, 1은 0으로)시킨 상태이며, +0과 -0이 존재합니다. 2의 보수는 1의 보수에 1을 더한 것으로, 0이 유일하게 하나만 존재하여 컴퓨터 덧셈/뺄셈 회로 설계에 훨씬 효율적입니다.",
+            },
+          },
+        ],
+      },
+    ],
   };
 
   return (
@@ -112,15 +145,15 @@ export default function TwosPage() {
 
             <div className="space-y-6">
               <h2 className="text-2xl font-bold tracking-tight text-center">
-                시험에 자주 나오는 포인트
+                자주 묻는 질문 (FAQ)
               </h2>
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <div className="p-5 rounded-xl border bg-white shadow-sm">
                   <h4 className="font-bold mb-2 text-slate-900">
-                    Q. 비트 수가 늘어나면 값이 어떻게 되나요?
+                    Q. 비트 수가 늘어나면 음수 2의 보수 값은 어떻게 되나요?
                   </h4>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    음수의 경우 가장 앞의 부호 비트(1)를 왼쪽으로 확장(Sign Extension)합니다. 예를 들어 8비트 -5는 16비트가 되어도 여전히 같은 값을 유지하도록 1이 채워집니다.
+                    음수의 경우 가장 앞의 부호 비트(1)를 왼쪽으로 확장(Sign Extension)합니다. 예를 들어 8비트 -5는 16비트가 되어도 여전히 같은 값을 유지하도록 상위 비트에 1이 채워집니다.
                   </p>
                 </div>
                 <div className="p-5 rounded-xl border bg-white shadow-sm">
@@ -128,7 +161,15 @@ export default function TwosPage() {
                     Q. 오버플로우(Overflow)란 무엇인가요?
                   </h4>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    계산 결과가 해당 비트 수로 표현할 수 있는 범위를 넘어설 때 발생합니다. 8비트 2의 보수 범위는 -128부터 +127까지입니다.
+                    계산 결과가 해당 비트 수로 표현할 수 있는 범위를 넘어설 때 발생합니다. 8비트 2의 보수 표현 범위는 -128부터 +127까지입니다.
+                  </p>
+                </div>
+                <div className="p-5 rounded-xl border bg-white shadow-sm sm:col-span-2 lg:col-span-1">
+                  <h4 className="font-bold mb-2 text-slate-900">
+                    Q. 1의 보수와 2의 보수의 차이는 무엇인가요?
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    1의 보수는 비트를 단순히 반전(0은 1로, 1은 0으로)시킨 상태이며, +0과 -0이 존재합니다. 2의 보수는 1의 보수에 1을 더한 것으로, 0이 유일하게 하나만 존재하여 컴퓨터 덧셈/뺄셈 회로 설계에 훨씬 효율적입니다.
                   </p>
                 </div>
               </div>

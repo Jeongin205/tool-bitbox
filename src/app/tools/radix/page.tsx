@@ -24,17 +24,50 @@ export const metadata = {
 export default function RadixPage() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "ToolBitBox 진법 변환기",
-    operatingSystem: "Any",
-    applicationCategory: "EducationalApplication",
-    description:
-      "2진수, 8진수, 10진수, 16진수를 실시간으로 상호 변환해주는 도구입니다.",
-    offers: {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD",
-    },
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        name: "ToolBitBox 진법 변환기",
+        operatingSystem: "Any",
+        applicationCategory: "EducationalApplication",
+        description:
+          "2진수, 8진수, 10진수, 16진수를 실시간으로 상호 변환해주는 도구입니다.",
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+        },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "16진수에서 A~F는 무엇인가요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "10진수의 10부터 15까지를 한 자리로 표현하기 위해 알파벳 A(10), B(11), C(12), D(13), E(14), F(15)를 사용합니다.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "진법 변환을 쉽게 하는 팁이 있나요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "2진수를 4자리씩 끊어서 읽으면 16진수로, 3자리씩 끊어서 읽으면 8진수로 쉽게 변환할 수 있어 실수를 줄일 수 있습니다.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "10진수를 2진수로 변환하는 원리는 무엇인가요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "10진수를 몫이 0이 될 때까지 2로 계속 나누고, 각 단계에서 나오는 나머지들을 역순(아래에서 위로)으로 나열하면 2진수가 됩니다.",
+            },
+          },
+        ],
+      },
+    ],
   };
 
   return (
@@ -130,7 +163,7 @@ export default function RadixPage() {
               <h2 className="text-2xl font-bold tracking-tight text-center">
                 자주 묻는 질문 (FAQ)
               </h2>
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <div className="p-5 rounded-xl border bg-white shadow-sm">
                   <h4 className="font-bold mb-2 text-slate-900">
                     Q. 16진수에서 A~F는 무엇인가요?
@@ -147,6 +180,14 @@ export default function RadixPage() {
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     2진수를 4자리씩 끊어서 읽으면 16진수로, 3자리씩 끊어서 읽으면
                     8진수로 쉽게 변환할 수 있어 실수를 줄일 수 있습니다.
+                  </p>
+                </div>
+                <div className="p-5 rounded-xl border bg-white shadow-sm sm:col-span-2 lg:col-span-1">
+                  <h4 className="font-bold mb-2 text-slate-900">
+                    Q. 10진수를 2진수로 변환하는 원리는 무엇인가요?
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    10진수를 몫이 0이 될 때까지 2로 계속 나누고, 각 단계에서 나오는 나머지들을 역순(아래에서 위로)으로 나열하면 2진수가 됩니다.
                   </p>
                 </div>
               </div>

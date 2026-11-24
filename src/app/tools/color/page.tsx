@@ -24,17 +24,50 @@ export const metadata = {
 export default function ColorPage() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "ToolBitBox HEX 색상 추출기",
-    operatingSystem: "Any",
-    applicationCategory: "DesignApplication",
-    description:
-      "HEX 코드, RGB, HSL 값을 실시간으로 추출하고 상호 변환해주는 웹 디자인 도구입니다.",
-    offers: {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD",
-    },
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        name: "ToolBitBox HEX 색상 추출기",
+        operatingSystem: "Any",
+        applicationCategory: "DesignApplication",
+        description:
+          "HEX 코드, RGB, HSL 값을 실시간으로 추출하고 상호 변환해주는 웹 디자인 도구입니다.",
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+        },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "HEX 코드에서 FF는 무엇을 의미하나요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "16진수에서 FF는 10진수의 255를 의미하며, 해당 색상 채널의 최대 밝기를 나타냅니다. 예를 들어 #FF0000은 순수한 빨간색입니다.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "대비 비율(Contrast Ratio)이 왜 중요한가요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "웹 접근성(WCAG) 표준에 따르면, 텍스트와 배경의 대비가 충분해야 모든 사용자가 정보를 읽을 수 있습니다. ToolBitBox는 실시간으로 이 대비율을 계산해 줍니다.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "HEX 코드 3자리와 6자리의 차이는 무엇인가요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "#RGB(3자리) 축약형은 각 문자가 두 번 반복되는 #RRGGBB(6자리)와 동일합니다. 예를 들어 #F0A는 #FF00AA와 정확히 같은 색상입니다.",
+            },
+          },
+        ],
+      },
+    ],
   };
 
   return (
@@ -109,7 +142,7 @@ export default function ColorPage() {
               <h2 className="text-2xl font-bold tracking-tight text-center">
                 자주 묻는 질문 (FAQ)
               </h2>
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <div className="p-5 rounded-xl border bg-white shadow-sm">
                   <h4 className="font-bold mb-2 text-slate-900">
                     Q. HEX 코드에서 &quot;FF&quot;는 무엇을 의미하나요?
@@ -124,6 +157,14 @@ export default function ColorPage() {
                   </h4>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     웹 접근성(WCAG) 표준에 따르면, 텍스트와 배경의 대비가 충분해야 모든 사용자가 정보를 읽을 수 있습니다. ToolBitBox는 실시간으로 이 대비율을 계산해 줍니다.
+                  </p>
+                </div>
+                <div className="p-5 rounded-xl border bg-white shadow-sm sm:col-span-2 lg:col-span-1">
+                  <h4 className="font-bold mb-2 text-slate-900">
+                    Q. HEX 코드 3자리와 6자리의 차이는 무엇인가요?
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    #RGB(3자리) 축약형은 각 문자가 두 번 반복되는 #RRGGBB(6자리)와 동일합니다. 예를 들어 #F0A는 #FF00AA와 정확히 같은 색상입니다.
                   </p>
                 </div>
               </div>

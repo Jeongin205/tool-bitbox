@@ -25,17 +25,50 @@ export const metadata = {
 export default function BitwisePage() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "ToolBitBox 비트 연산 시뮬레이터",
-    operatingSystem: "Any",
-    applicationCategory: "EducationalApplication",
-    description:
-      "비트 단위 연산(&, |, ^, ~, <<, >>)의 과정을 시각적으로 시뮬레이션해주는 도구입니다.",
-    offers: {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD",
-    },
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        name: "ToolBitBox 비트 연산 시뮬레이터",
+        operatingSystem: "Any",
+        applicationCategory: "EducationalApplication",
+        description:
+          "비트 단위 연산(&, |, ^, ~, <<, >>)의 과정을 시각적으로 시뮬레이션해주는 도구입니다.",
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+        },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "XOR(^) 연산은 주로 어디에 활용되나요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "XOR 연산은 두 값이 서로 다를 때만 1을 반환하는 특성을 이용해 두 변수의 값 맞바꾸기(Swap without temp), 패리티 비트 검사, 단순 데이터 암호화 및 그래픽 반전 효과에 널리 사용됩니다.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "시프트 연산자(<<, >>)는 어떤 효과가 있나요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "왼쪽 시프트(x << n)는 x에 2의 n제곱을 곱한 것과 같고, 오른쪽 시프트(x >> n)는 x를 2의 n제곱으로 나눈 몫과 같습니다. 일반 곱셈/나눗셈 연산자보다 하드웨어 처리 속도가 매우 빠릅니다.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "비트 마스킹(Bit Masking)이란 무엇인가요?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "AND(&) 연산자를 이용해 관심 있는 특정 비트만 추출하거나, OR(|) 연산자를 사용해 특정 비트만 1로 켜는 프로그래밍 기법입니다. 플래그(Flag) 관리나 하드웨어 제어에서 필수적입니다.",
+            },
+          },
+        ],
+      },
+    ],
   };
 
   return (
@@ -124,6 +157,38 @@ export default function BitwisePage() {
                 </div>
               </CardContent>
             </Card>
+
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold tracking-tight text-center">
+                자주 묻는 질문 (FAQ)
+              </h2>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="p-5 rounded-xl border bg-white shadow-sm">
+                  <h4 className="font-bold mb-2 text-slate-900">
+                    Q. XOR(^) 연산은 주로 어디에 활용되나요?
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    XOR 연산은 두 값이 서로 다를 때만 1을 반환하는 특성을 이용해 두 변수의 값 맞바꾸기(Swap without temp), 패리티 비트 검사, 단순 데이터 암호화 및 그래픽 반전 효과에 널리 사용됩니다.
+                  </p>
+                </div>
+                <div className="p-5 rounded-xl border bg-white shadow-sm">
+                  <h4 className="font-bold mb-2 text-slate-900">
+                    Q. 시프트 연산자(&lt;&lt;, &gt;&gt;)는 어떤 효과가 있나요?
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    왼쪽 시프트(x &lt;&lt; n)는 x에 2의 n제곱을 곱한 것과 같고, 오른쪽 시프트(x &gt;&gt; n)는 x를 2의 n제곱으로 나눈 몫과 같습니다. 일반 곱셈/나눗셈 연산자보다 하드웨어 처리 속도가 매우 빠릅니다.
+                  </p>
+                </div>
+                <div className="p-5 rounded-xl border bg-white shadow-sm sm:col-span-2 lg:col-span-1">
+                  <h4 className="font-bold mb-2 text-slate-900">
+                    Q. 비트 마스킹(Bit Masking)이란 무엇인가요?
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    AND(&amp;) 연산자를 이용해 관심 있는 특정 비트만 추출하거나, OR(|) 연산자를 사용해 특정 비트만 1로 켜는 프로그래밍 기법입니다. 플래그(Flag) 관리나 하드웨어 제어에서 필수적입니다.
+                  </p>
+                </div>
+              </div>
+            </div>
           </section>
         </div>
       </ToolPage>
