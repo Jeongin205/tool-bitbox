@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Play, Check, Info, Binary, Cpu, Calculator } from "lucide-react";
+import { Play, Check, Binary, Cpu, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

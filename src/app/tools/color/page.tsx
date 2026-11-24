@@ -110,7 +110,7 @@ export default function ColorPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="p-5 rounded-xl border bg-white shadow-sm">
                   <h4 className="font-bold mb-2 text-slate-900">
-                    Q. HEX 코드에서 "FF"는 무엇을 의미하나요?
+                    Q. HEX 코드에서 &quot;FF&quot;는 무엇을 의미하나요?
                   </h4>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     16진수에서 FF는 10진수의 255를 의미하며, 해당 색상 채널의 최대 밝기를 나타냅니다. 예를 들어 #FF0000은 순수한 빨간색입니다.

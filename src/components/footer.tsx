@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Github, Mail } from "lucide-react";
+import { Box, Github } from "lucide-react";
 
 export function Footer() {
   return (

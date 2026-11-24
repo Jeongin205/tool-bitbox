@@ -130,8 +130,8 @@ export default function QuizPage() {
               </div>
               <div className="p-6 bg-white/10 rounded-2xl border border-white/20 backdrop-blur-sm text-center">
                 <p className="italic text-slate-200">
-                  "시험 전날 10분만 투자해보세요. 진법 변환이 더 이상 두렵지
-                  않을 거예요!"
+                  &quot;시험 전날 10분만 투자해보세요. 진법 변환이 더 이상 두렵지
+                  않을 거예요!&quot;
                 </p>
               </div>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { Eraser, Pen, Trash2, X } from "lucide-react";
+import { Eraser, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -9,13 +9,22 @@ interface QuizScratchpadProps {
   className?: string;
 }
 
+const LINE_WIDTH = 2;
+
 export function QuizScratchpad({ className }: QuizScratchpadProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [color, setColor] = useState("#000000"); // 기본: 검정
-  const [lineWidth, setLineWidth] = useState(2);
   const [tool, setTool] = useState<"pen" | "eraser">("pen");
+
+  const colorRef = useRef(color);
+  const toolRef = useRef(tool);
+
+  useEffect(() => {
+    colorRef.current = color;
+    toolRef.current = tool;
+  }, [color, tool]);
 
   // 캔버스 초기화 및 리사이징 처리
   useEffect(() => {
@@ -26,8 +35,6 @@ export function QuizScratchpad({ className }: QuizScratchpadProps) {
     const resizeCanvas = () => {
       // 컨테이너의 크기에 맞춰 캔버스 해상도 조절 (반응형)
       const { width, height } = container.getBoundingClientRect();
-      // 기존 그림이 있으면 저장했다가 복구하는 로직은 복잡해지므로,
-      // 리사이즈 시 초기화되는 걸로 우선 구현 (필요시 이미지 데이터 저장 로직 추가 가능)
       canvas.width = width;
       canvas.height = height;
 
@@ -36,8 +43,10 @@ export function QuizScratchpad({ className }: QuizScratchpadProps) {
       if (ctx) {
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
-        ctx.strokeStyle = color;
-        ctx.lineWidth = lineWidth;
+        ctx.strokeStyle = toolRef.current === "eraser" ? "#ffffff" : colorRef.current;
+        ctx.lineWidth = toolRef.current === "eraser" ? 20 : LINE_WIDTH;
+        ctx.globalCompositeOperation =
+          toolRef.current === "eraser" ? "destination-out" : "source-over";
       }
     };
 
@@ -45,7 +54,7 @@ export function QuizScratchpad({ className }: QuizScratchpadProps) {
     window.addEventListener("resize", resizeCanvas);
 
     return () => window.removeEventListener("resize", resizeCanvas);
-  }, []); // 의존성 배열 비워서 마운트 시 1회 실행
+  }, []);
 
   // 도구/색상 변경 시 Context 업데이트
   useEffect(() => {

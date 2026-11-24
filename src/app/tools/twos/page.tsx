@@ -56,7 +56,7 @@ export default function TwosPage() {
             <div className="grid gap-8 md:grid-cols-2">
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold tracking-tight">
-                  2의 보수(Two's Complement)란?
+                  2의 보수(Two&apos;s Complement)란?
                 </h2>
                 <p className="text-muted-foreground leading-relaxed">
                   2의 보수는 컴퓨터가 <strong className="text-slate-900">음의 정수를 표현</strong>하기 위해 가장 널리 사용하는 방식입니다. 이 방식을 사용하면 덧셈 회로만으로 뺄셈을 처리할 수 있어 CPU 설계가 매우 단순해집니다.

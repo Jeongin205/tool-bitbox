@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Github, Code2, Cpu, Globe, Rocket } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Code2, Cpu, Globe, Rocket } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -44,7 +42,7 @@ export default function AboutPage() {
           <CardContent className="space-y-4 text-slate-600 leading-relaxed">
             <p>
               ToolBitBox는 컴퓨터 구조와 시스템 프로그래밍을 공부하며 겪었던
-              <strong> "진법 변환의 번거로움"</strong>을 해결하기 위해
+              <strong> &quot;진법 변환의 번거로움&quot;</strong>을 해결하기 위해
               시작되었습니다.
             </p>
             <p>
