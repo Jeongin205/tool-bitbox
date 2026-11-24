@@ -5,9 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, Target, BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "BitBox Challenge - 진법 변환 및 2의 보수 퀴즈 연습 | ToolBitBox",
+  title: "진법 변환 & 2의 보수 퀴즈 - 컴공·정보처리기사 시험 대비",
   description:
-    "컴퓨터 공학 1학년 필수 과정! 2진수, 16진수, 2의 보수 변환 문제를 풀며 컴퓨터 구조 및 시스템 프로그래밍 시험 실력을 테스트하세요. 실시간 피드백으로 개념을 확실히 잡을 수 있습니다.",
+    "2진수 변환, 16진수 계산, 2의 보수 실전 연습 문제 풀기! 컴퓨터 구조, 시스템 프로그래밍, 정보처리기사 진법 시험을 실시간 퀴즈로 완벽 대비하세요. 무료 온라인 진법 퀴즈.",
   keywords: [
     "진법 변환 퀴즈",
     "2진수 퀴즈",
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     "2의 보수 계산 문제",
     "컴퓨터 구조 시험 대비",
     "정보처리기사 진법 문제",
+    "컴공 1학년 진법 시험",
     "디지털 논리 회로 연습",
   ],
 };

@@ -4,19 +4,21 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 export const metadata = {
-  title: "비트 연산 시뮬레이터 (&, |, ^, ~, <<, >>) | ToolBitBox",
+  title: "비트 연산 시뮬레이터 - AND·OR·XOR·시프트 비트 애니메이션",
   description:
-    "컴퓨터 공학 학습을 위한 필수 비트 연산 시뮬레이터. AND, OR, XOR, NOT 및 시프트 연산의 과정을 비트 단위로 시각화하여 쉽게 이해할 수 있습니다.",
+    "비트 연산이 헷갈릴 땐 눈으로 직접 확인하세요. AND, OR, XOR, NOT, 시프트(<<, >>) 연산 과정을 한 비트씩 시각적으로 시뮬레이션합니다. 무료 온라인 비트 연산 계산기.",
   keywords: [
     "비트 연산자",
     "비트 연산 시뮬레이터",
+    "AND OR XOR 연산",
+    "비트 시프트 연산 원리",
     "AND 연산",
     "OR 연산",
     "XOR 연산",
     "NOT 연산",
     "시프트 연산",
     "bitwise simulator",
-    "컴퓨터 구조",
+    "컴퓨터 구조 비트 연산",
   ],
 };
 

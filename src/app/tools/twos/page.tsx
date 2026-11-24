@@ -5,12 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
-  title: "2의 보수 계산기 및 변환기 (보수 구하는 법) | ToolBitBox",
+  title: "2의 보수 계산기 - 음수 2진수 변환 및 비트 반전 풀이",
   description:
-    "컴퓨터 공학 필수 과정! 4/8/16/32비트 2의 보수 계산기입니다. 1의 보수와 2의 보수 차이, 음수 2진수 변환 원리, 비트 반전 과정을 이해하고 시험을 완벽히 대비하세요.",
+    "4·8·16·32비트 2의 보수를 클릭 한 번으로 계산! 1의 보수 비트 반전부터 +1 더하기 단계별 계산 과정과 음수 2진수 표현법을 완벽 정리해 드립니다. 무료 온라인 보수 계산기.",
   keywords: [
-    "보수 계산기",
     "2의 보수 계산기",
+    "음수 2의 보수 구하는 법",
+    "보수 계산기",
     "1의 보수 계산기",
     "Two's Complement Calculator",
     "음수 2진수 변환",

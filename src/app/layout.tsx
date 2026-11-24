@@ -24,10 +24,10 @@ export const metadata: Metadata = {
   },
   title: {
     template: "%s | ToolBitBox", // 페이지별 타이틀 뒤에 자동으로 붙음 (예: 진법 변환기 | BitBox)
-    default: "ToolBitBox - 컴퓨터 공학/소프트웨어학과 1학년 진법 학습 및 시험 대비 도구", // 기본 타이틀
+    default: "ToolBitBox - 진법 변환기·2의 보수·비트 연산 무료 계산기 모음", // 기본 타이틀
   },
   description:
-    "2진수, 8진수, 16진수 변환부터 2의 보수 계산까지. 컴퓨터 공학/소프트웨어학과 1학년 학생들이 진법 변환, 2의 보수 등 개념을 학습하고 시험을 대비하는 데 최적화된 웹 유틸리티입니다.",
+    "2진수·8진수·16진수 진법 변환, 2의 보수 계산, 비트 연산 시뮬레이터까지 한 곳에! 컴퓨터 공학·정보처리기사 시험을 위한 무료 온라인 개발자 도구 모음입니다.",
   applicationName: "ToolBitBox",
   appleWebApp: {
     title: "ToolBitBox",

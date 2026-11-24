@@ -4,14 +4,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 export const metadata = {
-  title: "HEX 색상 추출기 및 감지기 (RGB 변환기) | ToolBitBox",
+  title: "HEX 색상 추출기 - HEX to RGB·HSL 실시간 변환 및 코드 복사",
   description:
-    "웹 디자인과 개발을 위한 필수 HEX 색상 추출기. HEX 코드를 입력하거나 RGB 값을 조절하여 정확한 색상 코드를 찾고, 실시간으로 색상 형식(HEX, RGB, HSL)을 변환하세요.",
+    "HEX 코드와 RGB, HSL 상호 변환기. 색상 코드를 입력하거나 슬라이더로 조절하여 원하는 컬러 코드를 클릭 한 번으로 간편하게 복사하세요. 무료 온라인 색상 변환기.",
   keywords: [
+    "HEX RGB 변환기",
     "헥스 색상 추출기",
     "HEX 코드 감지기",
     "색상 코드 찾기",
     "RGB HEX 변환",
+    "HEX to HSL",
     "16진수 색상 선택기",
     "웹 컬러 코드",
     "색상 식별기",
